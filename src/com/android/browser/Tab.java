@@ -1341,6 +1341,12 @@ class Tab implements PictureListener {
             mCapture = null;
         }
         if (mMainView != null) {
+            if (mSubView != null)
+            {
+                //remove the Subwindow container first.
+                Controller mController = (Controller)mWebViewController;
+                mController.removeSubWindow(this);
+            }
             dismissSubWindow();
             // save the WebView to call destroy() after detach it from the tab
             WebView webView = mMainView;
