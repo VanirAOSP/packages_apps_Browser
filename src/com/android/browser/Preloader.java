@@ -31,7 +31,7 @@ public class Preloader {
     private final static String LOGTAG = "browser.preloader";
     private final static boolean LOGD_ENABLED = com.android.browser.Browser.LOGD_ENABLED;
 
-    private static final int PRERENDER_TIMEOUT_MILLIS = 30 * 1000; // 30s
+    private static final int PRERENDER_TIMEOUT_MILLIS = 30000; // 30s
 
     private static Preloader sInstance;
 

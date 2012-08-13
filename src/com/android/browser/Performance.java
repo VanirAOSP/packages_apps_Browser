@@ -67,7 +67,7 @@ public class Performance {
             host = host.replace('.', '_');
             host += ".trace";
             mInTrace = true;
-            Debug.startMethodTracing(host, 20 * 1024 * 1024);
+            Debug.startMethodTracing(host, 20971520);
         }
     }
 
