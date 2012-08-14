@@ -226,5 +226,4 @@ public class DownloadHandler {
         Toast.makeText(activity, R.string.download_pending, Toast.LENGTH_SHORT)
                 .show();
     }
-
 }

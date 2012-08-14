@@ -44,7 +44,7 @@ public class WallpaperHandler extends Thread
     private static final String LOGTAG = "WallpaperHandler";
     // This should be large enough for BitmapFactory to decode the header so
     // that we can mark and reset the input stream to avoid duplicate network i/o
-    private static final int BUFFER_SIZE = 128 * 1024;
+    private static final int BUFFER_SIZE = 131072;
 
     private Context mContext;
     private String  mUrl;

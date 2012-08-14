@@ -76,19 +76,19 @@ public class BrowserProvider2 extends SQLiteContentProvider {
             .authority(LEGACY_AUTHORITY).scheme("content").build();
 
     public static interface Thumbnails {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(
                 BrowserContract.AUTHORITY_URI, "thumbnails");
-        public static final String _ID = "_id";
-        public static final String THUMBNAIL = "thumbnail";
+    public static final String _ID = "_id";
+    public static final String THUMBNAIL = "thumbnail";
     }
 
     public static interface OmniboxSuggestions {
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(
                 BrowserContract.AUTHORITY_URI, "omnibox_suggestions");
-        public static final String _ID = "_id";
-        public static final String URL = "url";
-        public static final String TITLE = "title";
-        public static final String IS_BOOKMARK = "bookmark";
+    public static final String _ID = "_id";
+    public static final String URL = "url";
+    public static final String TITLE = "title";
+    public static final String IS_BOOKMARK = "bookmark";
     }
 
     static final String TABLE_BOOKMARKS = "bookmarks";

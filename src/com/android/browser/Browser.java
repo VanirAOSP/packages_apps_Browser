@@ -28,7 +28,7 @@ public class Browser extends Application {
     final static boolean LOGV_ENABLED = false;
 
     // Set to true to enable extra debug logging.
-    final static boolean LOGD_ENABLED = true;
+    final static boolean LOGD_ENABLED = false;
 
     @Override
     public void onCreate() {
