@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -48,6 +49,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.provider.Browser;
 import android.provider.BrowserContract;
 import android.provider.BrowserContract.Images;
@@ -300,6 +302,11 @@ public class Controller
 
     private void onPreloginFinished(Bundle icicle, Intent intent, long currentTabId,
             boolean restoreIncognitoTabs) {
+				
+		/*Context mContext = mActivity.getApplicationContext();
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Boolean restoreTabs = mPrefs.getBoolean(PreferenceKeys.PREF_RESTORE_TABS, true);*/
+				
         if (currentTabId == -1) {
             BackgroundHandler.execute(new PruneThumbnails(mActivity, null));
             if (intent == null) {
@@ -332,21 +339,24 @@ public class Controller
             }
             mUi.updateTabs(mTabControl.getTabs());
         } else {
-            mTabControl.restoreState(icicle, currentTabId, restoreIncognitoTabs,
-                    mUi.needsRestoreAllTabs());
-            List<Tab> tabs = mTabControl.getTabs();
-            ArrayList<Long> restoredTabs = new ArrayList<Long>(tabs.size());
-            for (Tab t : tabs) {
-                restoredTabs.add(t.getId());
-            }
-            BackgroundHandler.execute(new PruneThumbnails(mActivity, restoredTabs));
-            if (tabs.size() == 0) {
-                openTabToHomePage();
-            }
-            mUi.updateTabs(tabs);
-            // TabControl.restoreState() will create a new tab even if
-            // restoring the state fails.
-            setActiveTab(mTabControl.getCurrentTab());
+            // Disable this for now. Something is broken.
+            //if(restoreTabs == true) {
+                mTabControl.restoreState(icicle, currentTabId, restoreIncognitoTabs,
+                        mUi.needsRestoreAllTabs());
+                List<Tab> tabs = mTabControl.getTabs();
+                ArrayList<Long> restoredTabs = new ArrayList<Long>(tabs.size());
+                for (Tab t : tabs) {
+                    restoredTabs.add(t.getId());
+                }
+                BackgroundHandler.execute(new PruneThumbnails(mActivity, restoredTabs));
+                if (tabs.size() == 0) {
+                    openTabToHomePage();
+                }
+                mUi.updateTabs(tabs);
+                // TabControl.restoreState() will create a new tab even if
+                // restoring the state fails.
+                setActiveTab(mTabControl.getCurrentTab());
+            //}
             // Intent is non-null when framework thinks the browser should be
             // launching with a new intent (icicle is null).
             if (intent != null) {
@@ -445,7 +455,9 @@ public class Controller
     }
 
     int getMaxTabs() {
-        return mActivity.getResources().getInteger(R.integer.max_tabs);
+        Context mContext = mActivity.getApplicationContext();
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        return Integer.parseInt(mPrefs.getString(PreferenceKeys.PREF_MAX_TABS, "25"));
     }
 
     @Override
@@ -504,8 +516,9 @@ public class Controller
                                 break;
                             case R.id.open_newtab_context_menu_id:
                                 final Tab parent = mTabControl.getCurrentTab();
-                                openTab(url, parent,
-                                        !mSettings.openInBackground(), true);
+                                boolean privateBrowsing = msg.arg2 == 1;
+                                openTab(url, parent != null && privateBrowsing,
+                                        !mSettings.openInBackground(), true, parent);
                                 break;
                             case R.id.copy_link_context_menu_id:
                                 copy(url);
@@ -1406,6 +1419,42 @@ public class Controller
                                 });
                     }
                 }
+                newTabItem = menu.findItem(R.id.open_newtab_incognito_context_menu_id);
+                newTabItem.setTitle(getSettings().openInBackground()
+                        ? R.string.contextmenu_openlink_incognito_newwindow_background
+                                : R.string.contextmenu_openlink_incognito_newwindow);
+                newTabItem.setVisible(showNewTab);
+                newTabItem.setVisible(!mTabControl.getCurrentTab().isPrivateBrowsingEnabled());
+                if (showNewTab) {
+                    if (WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE == type) {
+                        newTabItem.setOnMenuItemClickListener(
+                                new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                     public boolean onMenuItemClick(MenuItem item) {
+                                        final HashMap<String, WebView> hrefMap =
+                                            new HashMap<String, WebView>();
+                                        hrefMap.put("webview", webview);
+                                        final Message msg = mHandler.obtainMessage(
+                                                FOCUS_NODE_HREF,
+                                                R.id.open_newtab_context_menu_id,
+                                                1, hrefMap);
+                                        webview.requestFocusNodeHref(msg);
+                                        return true;
+                                    }
+                                });
+                    } else {
+                        newTabItem.setOnMenuItemClickListener(
+                                new MenuItem.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        final Tab parent = mTabControl.getCurrentTab();
+                                        openTab(extra, parent != null,
+                                                !mSettings.openInBackground(), true, parent);
+                                        return true;
+                                    }
+                                });
+                    }
+                }
                 if (type == WebView.HitTestResult.SRC_ANCHOR_TYPE) {
                     break;
                 }
@@ -1637,6 +1686,10 @@ public class Controller
             case R.id.preferences_menu_id:
                 openPreferences();
                 break;
+                
+            case R.id.exit_menu_id:
+	            mActivity.finish();
+	            break;
 
             case R.id.find_menu_id:
                 findOnPage();

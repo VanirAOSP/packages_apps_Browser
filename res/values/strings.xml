@@ -236,6 +236,12 @@
     <string name="contextmenu_openlink_newwindow_background">Open in new background tab</string>
     <!-- Context Menu item to save the webpage referred to by this link to the
             SD card (external storage) -->
+    <!-- Context Menu item to open the currently selected link in a new
+            incognito window. -->
+    <string name="contextmenu_openlink_incognito_newwindow">Open in new incognito tab</string>
+    <!-- Context Menu item to open the currently selected link in a new
+         background window. [CHAR LIMIT=50] -->
+    <string name="contextmenu_openlink_incognito_newwindow_background">Open in new incognito background tab</string>
     <string name="contextmenu_savelink">Save link</string>
     <!-- Context Menu item to send the url of the selected link to someone else,
             via Gmail or another app [CHAR LIMIT=50] -->
@@ -280,6 +286,8 @@
     <!-- Title displayed when the bookmarks page is shown -->
     <string name="browser_bookmarks_page_bookmarks_text">Bookmarks</string>
 
+    <!-- Menu item to close the browser -->
+	<string name="menu_exit">Close browser</string>
 
     <!-- Settings screen strings -->
     <!-- Menu item to open the Settings screen -->
@@ -1010,5 +1018,33 @@
     <string name="accessibility_transition_navscreen">Tab management</string>
     <!-- Content description for navigating up in the bookmark folder hierarchy [CHAR LIMIT=NONE] -->
     <string name="accessibility_button_bookmarks_folder_up">Previous folder</string>
+    
+    <!-- Title for tab settings preference -->
+    <string name="tab_settings_title">Tab settings</string>
+    <!-- Dialog title -->
+    <string name="pref_max_open_tabs">Maximum open tabs</string>
+    <!-- Summary for Maximum open tabs -->
+    <string name="pref_max_open_tabs_summary">
+        Configure the maximum allowable open tabs for the browser</string>
+    <!-- Options in the Maximum open tabs dialog box -->
+    <string-array name="pref_max_open_tabs_choices">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
+    <!-- Do not translate -->
+    <string-array name="pref_max_open_tabs_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+    </string-array>
+    <!-- Title for Restore tabs -->
+    <!--<string name="pref_restore_tabs">Restore tabs</string>-->
+    <!-- Summary for Restore tabs -->
+    <!--<string name="pref_restore_tabs_summary">Restore tabs on browser launch, either after killing the browser or after reboot</string>-->
 
 </resources>
