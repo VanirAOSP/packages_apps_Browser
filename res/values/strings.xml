@@ -1043,8 +1043,8 @@
         <item>25</item>
     </string-array>
     <!-- Title for Restore tabs -->
-    <!--<string name="pref_restore_tabs">Restore tabs</string>-->
+    <string name="pref_restore_tabs">Restore tabs</string>
     <!-- Summary for Restore tabs -->
-    <!--<string name="pref_restore_tabs_summary">Restore tabs on browser launch, either after killing the browser or after reboot</string>-->
+    <string name="pref_restore_tabs_summary">Restore tabs on browser launch, either after killing the browser or after reboot</string>
 
 </resources>

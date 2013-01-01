@@ -23,9 +23,9 @@ xmlns:android="http://schemas.android.com/apk/res/android" >
         android:summary="@string/pref_max_open_tabs_summary"
         android:entries="@array/pref_max_open_tabs_choices"
         android:entryValues="@array/pref_max_open_tabs_values" />
-<!--<CheckBoxPreference
+<CheckBoxPreference
        	android:key="restore_tabs_on_launch"
         android:defaultValue = "true"
         android:title="@string/pref_restore_tabs"
-        android:summary="@string/pref_restore_tabs_summary" />-->
+        android:summary="@string/pref_restore_tabs_summary" />
 </PreferenceScreen>
