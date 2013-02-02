@@ -937,9 +937,10 @@ class Tab implements PictureListener {
             }
 
             // Don't log console messages in private browsing mode
-            if (isPrivateBrowsingEnabled()) return true;
+            //if (isPrivateBrowsingEnabled()) return true;
 
-            String message = "Console: " + consoleMessage.message() + " "
+            //IF WE CARED, WE'D OPEN UP THE ERROR CONSOLE. STFU IN LOGCAT!
+            /*String message = "Console: " + consoleMessage.message() + " "
                     + consoleMessage.sourceId() +  ":"
                     + consoleMessage.lineNumber();
 
@@ -959,7 +960,7 @@ class Tab implements PictureListener {
                 case DEBUG:
                     Log.d(CONSOLE_LOGTAG, message);
                     break;
-            }
+            }*/
 
             return true;
         }
