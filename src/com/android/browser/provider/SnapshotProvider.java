@@ -62,6 +62,7 @@ public class SnapshotProvider extends ContentProvider {
     static final byte[] NULL_BLOB_HACK = new byte[0];
 
     SnapshotDatabaseHelper mOpenHelper;
+    private static Cursor mCursor;
 
     static {
         URI_MATCHER.addURI(AUTHORITY, "snapshots", SNAPSHOTS);
@@ -170,11 +171,13 @@ public class SnapshotProvider extends ContentProvider {
         default:
             throw new UnsupportedOperationException("Unknown URL " + uri.toString());
         }
-        Cursor cursor = qb.query(db, projection, selection, selectionArgs,
+        if (mCursor == null) {
+            mCursor = qb.query(db, projection, selection, selectionArgs,
                 null, null, sortOrder, limit);
-        cursor.setNotificationUri(getContext().getContentResolver(),
+        }
+        mCursor.setNotificationUri(getContext().getContentResolver(),
                 AUTHORITY_URI);
-        return cursor;
+        return mCursor;
     }
 
     @Override
@@ -213,22 +216,28 @@ public class SnapshotProvider extends ContentProvider {
     };
     private void deleteDataFiles(SQLiteDatabase db, String selection,
             String[] selectionArgs) {
-        Cursor c = db.query(TABLE_SNAPSHOTS, DELETE_PROJECTION, selection,
+        Cursor c = null;
+        try {
+            c =db.query(TABLE_SNAPSHOTS, DELETE_PROJECTION, selection,
                 selectionArgs, null, null, null);
-        final Context context = getContext();
-        while (c.moveToNext()) {
-            String filename = c.getString(0);
-            if (TextUtils.isEmpty(filename)) {
-                continue;
-            }
-            File f = context.getFileStreamPath(filename);
-            if (f.exists()) {
-                if (!f.delete()) {
-                    f.deleteOnExit();
+            final Context context = getContext();
+            while (c.moveToNext()) {
+                String filename = c.getString(0);
+                if (TextUtils.isEmpty(filename)) {
+                    continue;
+                }
+                File f = context.getFileStreamPath(filename);
+                if (f.exists()) {
+                    if (!f.delete()) {
+                        f.deleteOnExit();
+                    }
                 }
             }
+        } finally {
+            if (c != null) {
+               c.close();
+            }
         }
-        c.close();
     }
 
     @Override

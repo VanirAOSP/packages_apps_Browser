@@ -238,18 +238,19 @@ public class Controller
         mPageDialogsHandler = new PageDialogsHandler(mActivity, this);
 
         startHandler();
-        mBookmarksObserver = new ContentObserver(mHandler) {
-            @Override
-            public void onChange(boolean selfChange) {
-                int size = mTabControl.getTabCount();
-                for (int i = 0; i < size; i++) {
-                    mTabControl.getTab(i).updateBookmarkedStatus();
+        if (mBookmarksObserver == null) {
+            mBookmarksObserver = new ContentObserver(mHandler) {
+                @Override
+                public void onChange(boolean selfChange) {
+                    int size = mTabControl.getTabCount();
+                    for (int i = 0; i < size; i++) {
+                        mTabControl.getTab(i).updateBookmarkedStatus();
+                    }
                 }
-            }
-
-        };
-        browser.getContentResolver().registerContentObserver(
+            };
+            browser.getContentResolver().registerContentObserver(
                 BrowserContract.Bookmarks.CONTENT_URI, true, mBookmarksObserver);
+        }
 
         mNetworkHandler = new NetworkStateHandler(mActivity, this);
         // Start watching the default geolocation permissions
