@@ -780,6 +780,7 @@ public class Controller
             dismissSubWindow(t);
             removeTab(t);
         }
+        releaseWakeLock();
         mActivity.getContentResolver().unregisterContentObserver(mBookmarksObserver);
         // Destroy all the tabs
         mTabControl.destroy();
