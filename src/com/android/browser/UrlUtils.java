@@ -33,6 +33,7 @@ public class UrlUtils {
             "(" +    // begin group for schema
             "(?:http|https|file|rtsp):\\/\\/" +
             "|(?:inline|data|about|javascript):" +
+            "|(?:.*:.*@)" +
             ")" +
             "(.*)" );
 
