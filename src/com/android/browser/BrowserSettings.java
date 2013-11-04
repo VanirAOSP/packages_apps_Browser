@@ -262,7 +262,7 @@ public class BrowserSettings implements OnSharedPreferenceChangeListener,
         settings.setSavePassword(rememberPasswords());
         settings.setSaveFormData(saveFormdata());
         settings.setUseWideViewPort(isWideViewport());
-        settings.setWebSocketsEnabled(isWebSocketsEnabled());
+        //settings.setWebSocketsEnabled(isWebSocketsEnabled());
 
 
         String ua = mCustomUserAgents.get(settings);
