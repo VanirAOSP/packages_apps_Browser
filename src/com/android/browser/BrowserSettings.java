@@ -60,8 +60,8 @@ public class BrowserSettings implements OnSharedPreferenceChangeListener,
 
     // TODO: Do something with this UserAgent stuff
     private static final String DESKTOP_USERAGENT = "Mozilla/5.0 (X11; " +
-        "Linux x86_64) AppleWebKit/534.24 (KHTML, like Gecko) " +
-        "Chrome/11.0.696.34 Safari/534.24";
+        "Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) " +
+        "Chrome/30.0.1599.101 Safari/537.36";
 
     private static final String IPHONE_USERAGENT = "Mozilla/5.0 (iPhone; U; " +
         "CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 " +
@@ -358,7 +358,7 @@ public class BrowserSettings implements OnSharedPreferenceChangeListener,
     public LayoutAlgorithm getLayoutAlgorithm() {
         LayoutAlgorithm layoutAlgorithm = LayoutAlgorithm.NORMAL;
         if (autofitPages()) {
-            layoutAlgorithm = LayoutAlgorithm.NARROW_COLUMNS;
+            layoutAlgorithm = LayoutAlgorithm.TEXT_AUTOSIZING;
         }
         if (isDebugEnabled()) {
             if (isSmallScreen()) {
@@ -367,7 +367,7 @@ public class BrowserSettings implements OnSharedPreferenceChangeListener,
                 if (isNormalLayout()) {
                     layoutAlgorithm = LayoutAlgorithm.NORMAL;
                 } else {
-                    layoutAlgorithm = LayoutAlgorithm.NARROW_COLUMNS;
+                    layoutAlgorithm = LayoutAlgorithm.TEXT_AUTOSIZING;
                 }
             }
         }
