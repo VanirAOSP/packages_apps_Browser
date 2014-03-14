@@ -1,6 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+ifneq ($(TARGET_IS_AN_ANTIQUE), TRUE)
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
@@ -26,3 +27,4 @@ include $(BUILD_PACKAGE)
 
 # additionally, build tests in sub-folders in a separate .apk
 include $(call all-makefiles-under,$(LOCAL_PATH))
+endif
