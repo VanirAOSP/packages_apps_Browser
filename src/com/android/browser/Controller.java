@@ -75,6 +75,7 @@ import android.webkit.MimeTypeMap;
 import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebChromeClient.FileChooserParams;
 import android.webkit.WebIconDatabase;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -1607,10 +1608,6 @@ public class Controller
                 openTabToHomePage();
                 break;
 
-            case R.id.incognito_menu_id:
-                openIncognitoTab();
-                break;
-
             case R.id.close_other_tabs_id:
                 closeOtherTabs();
                 break;
@@ -1997,9 +1994,9 @@ public class Controller
 
     // file chooser
     @Override
-    public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+    public void showFileChooser(ValueCallback<Uri[]> callback, FileChooserParams params) {
         mUploadHandler = new UploadHandler(this);
-        mUploadHandler.openFileChooser(uploadMsg, acceptType, capture);
+        mUploadHandler.openFileChooser(callback, params);
     }
 
     // thumbnails
@@ -2783,18 +2780,11 @@ public class Controller
 
     @Override
     public void startVoiceRecognizer() {
-        try{
-            Intent voice = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            voice.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            voice.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-            mActivity.startActivityForResult(voice, VOICE_RESULT);
-        }
-        catch(android.content.ActivityNotFoundException ex)
-        {
-            //if could not find the Activity
-            Log.e(LOGTAG, "Could not start voice recognizer activity");
-        }
+        Intent voice = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        voice.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        voice.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        mActivity.startActivityForResult(voice, VOICE_RESULT);
     }
 
     @Override
