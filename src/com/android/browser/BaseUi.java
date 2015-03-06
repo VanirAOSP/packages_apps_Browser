@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2010 The Android Open Source Project
+ * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +76,9 @@ public abstract class BaseUi implements UI {
         Gravity.CENTER);
 
     private static final int MSG_HIDE_TITLEBAR = 1;
+    private static final int MSG_HIDE_CUSTOM_VIEW = 2;
     public static final int HIDE_TITLEBAR_DELAY = 1500; // in ms
+    public static final int HIDE_CUSTOM_VIEW_DELAY = 750; // in ms
 
     Activity mActivity;
     UiController mUiController;
@@ -135,7 +138,7 @@ public abstract class BaseUi implements UI {
                 R.id.fullscreen_custom_content);
         mErrorConsoleContainer = (LinearLayout) frameLayout
                 .findViewById(R.id.error_console);
-        setFullscreen(BrowserSettings.getInstance().useFullscreen());
+        setFullscreen(false);
         mGenericFavicon = res.getDrawable(
                 R.drawable.app_web_browser_sm);
         mTitleBar = new TitleBar(mActivity, mUiController, this,
@@ -539,19 +542,28 @@ public abstract class BaseUi implements UI {
         mActivity.setRequestedOrientation(requestedOrientation);
     }
 
-    @Override
-    public void onHideCustomView() {
-        ((BrowserWebView) getWebView()).setVisibility(View.VISIBLE);
-        if (mCustomView == null)
-            return;
+    private void hideCustomViewAfterDuration() {
+        Message msg = Message.obtain(mHandler, MSG_HIDE_CUSTOM_VIEW);
+        mHandler.sendMessageDelayed(msg, HIDE_CUSTOM_VIEW_DELAY);
+    }
+
+    private void hideCustomView() {
         setFullscreen(false);
         FrameLayout decor = (FrameLayout) mActivity.getWindow().getDecorView();
         decor.removeView(mFullscreenContainer);
         mFullscreenContainer = null;
         mCustomView = null;
-        mCustomViewCallback.onCustomViewHidden();
         // Show the content view.
         mActivity.setRequestedOrientation(mOriginalOrientation);
+    }
+
+    @Override
+    public void onHideCustomView() {
+        ((BrowserWebView) getWebView()).setVisibility(View.VISIBLE);
+        if (mCustomView == null)
+            return;
+        mCustomViewCallback.onCustomViewHidden();
+        hideCustomViewAfterDuration();
     }
 
     @Override
@@ -778,6 +790,13 @@ public abstract class BaseUi implements UI {
         win.setAttributes(winParams);
     }
 
+    public boolean isFullscreen() {
+        Window win = mActivity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        return (winParams.flags & bits) == bits;
+    }
+
     public Drawable getFaviconDrawable(Bitmap icon) {
         Drawable[] array = new Drawable[3];
         array[0] = new PaintDrawable(Color.BLACK);
@@ -826,6 +845,8 @@ public abstract class BaseUi implements UI {
         public void handleMessage(Message msg) {
             if (msg.what == MSG_HIDE_TITLEBAR) {
                 suggestHideTitleBar();
+            } else if (msg.what == MSG_HIDE_CUSTOM_VIEW) {
+                hideCustomView();
             }
             BaseUi.this.handleMessage(msg);
         }
