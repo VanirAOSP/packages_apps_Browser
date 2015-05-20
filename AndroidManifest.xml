@@ -22,6 +22,15 @@
 
     <uses-sdk android:minSdkVersion="21"/>
 
+    <uses-feature android:name="android.software.leanback"
+    android:required="false" />
+
+    <uses-feature android:name="android.hardware.touchscreen"
+    android:required="false" />
+
+    <uses-feature android:name="android.hardware.screen.portrait"
+    android:required="false" />
+
     <permission android:name="com.android.browser.permission.PRELOAD"
         android:label="@string/permission_preload_label"
         android:protectionLevel="signatureOrSystem" />
@@ -55,6 +64,7 @@
     <application   android:name="Browser"
                    android:label="@string/application_name"
                    android:icon="@mipmap/ic_launcher_browser"
+                   android:banner="@drawable/banner"
                    android:backupAgent=".BrowserBackupAgent"
                    android:hardwareAccelerated="true"
                    android:taskAffinity="android.task.browser"
@@ -90,7 +100,6 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:scheme="about" />
-                <data android:scheme="javascript" />
             </intent-filter>
             <!--  For these schemes where any of these particular MIME types
                   have been supplied, we are a good candidate. -->
@@ -106,16 +115,6 @@
                 <data android:mimeType="application/xhtml+xml"/>
                 <data android:mimeType="application/vnd.wap.xhtml+xml"/>
             </intent-filter>
-            <!-- For viewing saved web archives. -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:scheme="file" />
-                <data android:mimeType="application/x-webarchive-xml"/>
-            </intent-filter>
             <!-- Accept inbound NFC URLs at a low priority -->
             <intent-filter android:priority="-101">
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -128,6 +127,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.APP_BROWSER" />
             </intent-filter>
